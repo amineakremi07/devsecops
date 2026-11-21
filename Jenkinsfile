@@ -1,4 +1,4 @@
-@Library('slack') _
+// @Library('slack') _
 
 
 /////// ******************************* Code for fectching Failed Stage Name ******************************* ///////
@@ -53,18 +53,18 @@ pipeline {
 
   stages {
 
- //    stage('Build Artifact - Maven') {
- //      steps {
- //        sh "mvn clean package -DskipTests=true"
- //        archive 'target/*.jar'
- //      }
- //    }
+       stage('Build Artifact - Maven') {
+         steps {
+           sh "mvn clean package -DskipTests=true"
+           archive 'target/*.jar'
+         }
+       }
 
- //    stage('Unit Tests - JUnit and JaCoCo') {
- //      steps {
- //        sh "mvn test"
- //      }
- //    }
+       stage('Unit Tests - JUnit and JaCoCo') {
+         steps {
+           sh "mvn test"
+         }
+       }
 
  //    stage('Mutation Tests - PIT') {
  //      steps {
@@ -249,36 +249,36 @@ pipeline {
 
   }
 
-  post { 
-     //    always { 
-     //      junit 'target/surefire-reports/*.xml'
-     //      jacoco execPattern: 'target/jacoco.exec'
-     //      pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-     //      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-     //      publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report'])
-        
- 		  // //Use sendNotifications.groovy from shared library and provide current build result as parameter 
-     //      //sendNotification currentBuild.result
-     //    }
-
-        success {
-        	script {
-		        /* Use slackNotifier.groovy from shared library and provide current build result as parameter */  
-		        env.failedStage = "none"
-		        env.emoji = ":white_check_mark: :tada: :thumbsup_all:" 
-		        sendNotification currentBuild.result
-		      }
-        }
-
-	    failure {
-	    	script {
-			  //Fetch information about  failed stage
-		      def failedStages = getFailedStages( currentBuild )
-	          env.failedStage = failedStages.failedStageName
-	          env.emoji = ":x: :red_circle: :sos:"
-		      sendNotification currentBuild.result
-		    }	
-	    }
-    }
+//  post { 
+//     //    always { 
+//     //      junit 'target/surefire-reports/*.xml'
+//     //      jacoco execPattern: 'target/jacoco.exec'
+//     //      pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+//     //      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+//     //      publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report'])
+//        
+// 		  // //Use sendNotifications.groovy from shared library and provide current build result as parameter 
+//     //      //sendNotification currentBuild.result
+//     //    }
+//
+//        success {
+//        	script {
+//		        /* Use slackNotifier.groovy from shared library and provide current build result as parameter */  
+//		        env.failedStage = "none"
+//		        env.emoji = ":white_check_mark: :tada: :thumbsup_all:" 
+//		        sendNotification currentBuild.result
+//		      }
+//        }
+//
+//	    failure {
+//	    	script {
+//			  //Fetch information about  failed stage
+//		      def failedStages = getFailedStages( currentBuild )
+//	          env.failedStage = failedStages.failedStageName
+//	          env.emoji = ":x: :red_circle: :sos:"
+//		      sendNotification currentBuild.result
+//		    }	
+//	    }
+//    }
 
 }
