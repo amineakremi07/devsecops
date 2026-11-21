@@ -1,6 +1,7 @@
 // @Library('slack') _
 
 
+/*
 /////// ******************************* Code for fectching Failed Stage Name ******************************* ///////
 import io.jenkins.blueocean.rest.impl.pipeline.PipelineNodeGraphVisitor
 import io.jenkins.blueocean.rest.impl.pipeline.FlowNodeWrapper
@@ -38,6 +39,7 @@ List<Map> getFailedStages( RunWrapper build ) {
 }
 
 /////// ******************************* Code for fectching Failed Stage Name ******************************* ///////
+*/
 
 pipeline {
   agent any
