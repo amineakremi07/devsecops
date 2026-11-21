@@ -13,44 +13,41 @@ TRIVY_IMAGE="aquasec/trivy:0.76.2"
 # Create persistent cache
 docker volume create trivy-cache >/dev/null
 
-# Create reports directory
-mkdir -p trivy-reports
-
 # Scan HIGH vulnerabilities (informational)
 echo "=== Scanning HIGH vulnerabilities ==="
+mkdir -p trivy-reports
 
 docker run --rm \
     -v trivy-cache:/root/.cache/ \
-    -v "$(pwd)/trivy-reports":/reports \
     "$TRIVY_IMAGE" image \
     --timeout 15m \
     --scanners vuln \
     --exit-code 0 \
     --severity HIGH \
     --format table \
-    --output /reports/trivy-high.txt \
-    "$dockerImageName"
+    "$dockerImageName" > trivy-reports/trivy-high.txt
 
 cat trivy-reports/trivy-high.txt
 
 # Scan CRITICAL vulnerabilities (blocking)
 echo "=== Scanning CRITICAL vulnerabilities ==="
+mkdir -p trivy-reports
 
 if docker run --rm \
     -v trivy-cache:/root/.cache/ \
-    -v "$(pwd)/trivy-reports":/reports \
     "$TRIVY_IMAGE" image \
     --timeout 15m \
     --scanners vuln \
     --exit-code 1 \
     --severity CRITICAL \
     --format table \
-    --output /reports/trivy-critical.txt \
-    "$dockerImageName"
+    "$dockerImageName" > trivy-reports/trivy-critical.txt
 then
+    cat trivy-reports/trivy-critical.txt
     echo "Image scanning passed."
     echo "No CRITICAL vulnerabilities found."
 else
+    cat trivy-reports/trivy-critical.txt || true
     echo "Image scanning failed."
     echo "CRITICAL vulnerabilities or scanner error."
     exit 1
